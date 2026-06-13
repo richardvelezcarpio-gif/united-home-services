@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 import {
   LayoutDashboard,
   Briefcase,
@@ -19,6 +21,22 @@ import {
 } from "lucide-react";
 
 export default function ClientPortal({ language }) {
+
+    const [userEmail, setUserEmail] = useState("");
+
+useEffect(() => {
+  const getUser = async () => {
+    const { data } = await supabase.auth.getUser();
+    setUserEmail(data?.user?.email || "");
+  };
+
+  getUser();
+}, []);
+
+    const handleLogout = async () => {
+  await supabase.auth.signOut();
+  window.location.href = "/login";
+};
     console.log("LANGUAGE:", language);
     const t = {
   title:
@@ -137,7 +155,7 @@ export default function ClientPortal({ language }) {
 
           <p className="text-xl">{t.welcome}</p>
           <h2 className="font-serif text-4xl text-[#b57a18] mt-1">
-            Juan Pérez
+            {userEmail || "Client"}
           </h2>
 
           <p className="mt-4 max-w-md text-gray-700 leading-relaxed">
@@ -156,20 +174,31 @@ export default function ClientPortal({ language }) {
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
           {/* SIDEBAR */}
           <aside className="bg-black text-white rounded-lg overflow-hidden shadow-xl">
-            {menu.map(([name, Icon, path], i) => (
-  <Link
-    key={name}
-    to={path}
-    className={`flex items-center gap-4 px-6 py-4 text-sm cursor-pointer ${
-      i === 0
-        ? "bg-gradient-to-r from-[#c8912b] to-[#e2b958] text-white"
-        : "hover:bg-[#111]"
-    }`}
-  >
-    <Icon className="w-5 h-5 text-[#d6a537]" />
-    {name}
-  </Link>
-))}
+           {menu.map(([name, Icon, path], i) =>
+  name === "Log Out" ? (
+    <button
+      key={name}
+      onClick={handleLogout}
+      className="w-full flex items-center gap-4 px-6 py-4 text-sm cursor-pointer hover:bg-[#111] text-left"
+    >
+      <Icon className="w-5 h-5 text-[#d6a537]" />
+      {name}
+    </button>
+  ) : (
+    <Link
+      key={name}
+      to={path}
+      className={`flex items-center gap-4 px-6 py-4 text-sm cursor-pointer ${
+        i === 0
+          ? "bg-gradient-to-r from-[#c8912b] to-[#e2b958] text-white"
+          : "hover:bg-[#111]"
+      }`}
+    >
+      <Icon className="w-5 h-5 text-[#d6a537]" />
+      {name}
+    </Link>
+  )
+)}
           </aside>
 
           <main className="space-y-6">
@@ -442,6 +471,19 @@ export default function ClientPortal({ language }) {
         <li>Brooklyn, NY 11237</li>
       </ul>
     </div>
+
+    <Link
+  to="/my-documents"
+  className="bg-white rounded-lg border shadow-md p-6 hover:shadow-lg transition"
+>
+  <h3 className="text-lg font-bold text-[#c8912b] mb-2">
+    My Documents
+  </h3>
+
+  <p className="text-gray-600 text-sm">
+    View uploaded documents and track approval status.
+  </p>
+</Link>
 
     {/* Hours */}
     <div>

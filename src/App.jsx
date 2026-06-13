@@ -17,7 +17,14 @@ import MyCase from "./pages/MyCase";
 import Agreements from "./pages/Agreements";
 import Forms from "./pages/Forms";
 import Resources from "./pages/Resources";
+import Login from "./pages/Login";
 import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import AdminPanel from "./pages/AdminPanel";
+import MyDocuments from "./pages/MyDocuments";
+import UpdatePassword from "./pages/UpdatePassword";
 
 function App() {
   const [language, setLanguage] = useState("en");
@@ -42,44 +49,126 @@ function App() {
           element={<Services language={language} />}
         />
 
-        <Route
-          path="/client-portal"
-          element={<ClientPortal language={language} />}
-        />
-
-        <Route
-  path="/client-portal/my-case"
-  element={<MyCase language={language} />}
+    <Route
+  path="/client-portal"
+  element={
+    <ProtectedRoute>
+      <ClientPortal language={language} />
+    </ProtectedRoute>
+  }
 />
-        <Route path="/appointments" element={<Appointments />} />
 
+   <Route
+  path="/client-portal/my-case"
+  element={
+    <ProtectedRoute>
+      <MyCase language={language} />
+    </ProtectedRoute>
+  }
+/>
         <Route
+  path="/appointments"
+  element={
+    <ProtectedRoute>
+      <Appointments />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
   path="/messages"
-  element={<Messages />}
+  element={
+    <ProtectedRoute>
+      <Messages />
+    </ProtectedRoute>
+  }
 />
 
 <Route
   path="/payments"
-  element={<Payments />}
+  element={
+    <ProtectedRoute>
+      <Payments />
+    </ProtectedRoute>
+  }
 />
-
-<Route path="/profile" element={<MyProfile />} />
 
 <Route
-  path="/client-portal/agreements"
-  element={<Agreements language={language} />}
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <MyProfile />
+    </ProtectedRoute>
+  }
 />
 
-<Route path="/forms" element={<Forms language={language} />} />
+<Route
+  path="/client-portal"
+  element={
+    <ProtectedRoute>
+      <ClientPortal language={language} />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/forms"
+  element={
+    <ProtectedRoute>
+      <Forms language={language} />
+    </ProtectedRoute>
+  }
+/>
 
 <Route path="/resources" element={<Resources language={language} />} />
 
-      
+<Route
+  path="/login"
+  element={<Login />}
+/>
+
+<Route
+  path="/register"
+  element={<Register />}
+/>
+
+<Route
+  path="/forgot-password"
+  element={<ForgotPassword />}
+/>
+
+<Route
+  path="/update-password"
+  element={<UpdatePassword />}
+/>
 
         <Route
-          path="/upload-documents"
-          element={<UploadDocuments />}
-        />
+  path="/upload-documents"
+  element={
+    <ProtectedRoute>
+      <UploadDocuments />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin-panel"
+  element={
+    <ProtectedRoute>
+      <AdminPanel />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/my-documents"
+  element={
+    <ProtectedRoute>
+      <MyDocuments />
+    </ProtectedRoute>
+  }
+/>
+
       </Routes>
       <Footer language={language} />
         </>
